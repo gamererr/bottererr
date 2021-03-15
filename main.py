@@ -23,7 +23,17 @@ async def ping(ctx):
 	await ctx.send(f'Pong! {round(client.latency*1000)} ms')
 
 @client.command()
-async def kick(ctx, user, reason):
+async def wii(ctx, *game):
+	game = " ".join(game)
+	gamererr = client.get_user(312292633978339329)
+	await gamererr.send(f'wii game from **{ctx.author}** ```{game}```')
+	print(f'wii game from {ctx.author}, {game}')
+	await ctx.send(f'suggestion taken ```{game}```')
+
+@client.command()
+async def kick(ctx, user, *reason):
+
+	reason = " ".join(reason)
 
 	if ctx.channel.permissions_for(ctx.author).kick_members:
 		try:
@@ -38,9 +48,10 @@ async def kick(ctx, user, reason):
 
 		await ctx.send(embed=embed)
 
-
 @client.command()
-async def ban(ctx, user, reason):
+async def ban(ctx, user, *reason):
+
+	reason = " ".join(reason)
 
 	if ctx.channel.permissions_for(ctx.author).ban_members:
 		try:
