@@ -10,13 +10,37 @@ client = commands.Bot(command_prefix='g!', intents=intents)
 
 @client.event
 async def on_ready():
-	print("hello world!")
+	print("hellow world!")
 
 
 with open("tokenfile", "r") as tokenfile:
 		token=tokenfile.read()
 
 # VVVVVV commands VVVVVV'
+
+@client.command()
+async def purge(ctx):
+	if not await client.is_owner(ctx.author):
+		embed = discord.Embed(title="you dont have permission to do this command", colour=discord.Colour.red(), description="become the owner of the bot nerd")
+		await ctx.send(embed=embed)
+		return
+
+	async for x in ctx.channel.history():
+		try:
+			if x.id == ctx.message.reference.message_id:
+				purge = x
+		except AttributeError:
+			embed = discord.Embed(title="you need to reply to a message", colour=discord.Colour.red())
+			await ctx.send(embed=embed)
+			return
+
+	amount = 0
+	async for x in ctx.channel.history(after=purge, before=ctx.message):
+		amount += 1
+
+	await ctx.channel.purge(after=purge, before=ctx.message)
+	embed = discord.Embed(title=f"{amount} messages purged", colour=discord.Colour.green())
+	await ctx.send(embed=embed)
 
 @client.command()
 async def ping(ctx):
