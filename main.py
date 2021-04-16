@@ -10,13 +10,18 @@ client = commands.Bot(command_prefix='g!', intents=intents)
 
 @client.event
 async def on_ready():
-	print("hellow world!")
-
+	print("hello world!")
+	gamerzone = client.get_guild(766848554899079218)
+	await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"Spotify"))
 
 with open("tokenfile", "r") as tokenfile:
 		token=tokenfile.read()
 
 # VVVVVV commands VVVVVV'
+
+@client.command(aliases=['mc'])
+async def membercount(ctx):
+	await ctx.send(len(ctx.guild.members))
 
 @client.command()
 async def purge(ctx):
@@ -34,11 +39,12 @@ async def purge(ctx):
 			await ctx.send(embed=embed)
 			return
 
-	amount = 0
+	amount = 1
 	async for x in ctx.channel.history(after=purge, before=ctx.message):
 		amount += 1
 
 	await ctx.channel.purge(after=purge, before=ctx.message)
+	await purge.delete()
 	embed = discord.Embed(title=f"{amount} messages purged", colour=discord.Colour.green())
 	await ctx.send(embed=embed)
 
