@@ -19,6 +19,24 @@ with open("tokenfile", "r") as tokenfile:
 # VVVVVV commands VVVVVV'
 
 @client.command()
+async def owo(ctx, *owo):
+	owo = ' '.join(owo)
+	if owo == '':
+		await ctx.send('you need to give me something to owoify')
+		return
+	owo = owo.replace('rr','🇷')
+	owo = owo.replace('RR','🇷 🇷')
+	owo = owo.replace('r','w')
+	owo = owo.replace('R','W')
+	owo = owo.replace('🇷','rr')
+	owo = owo.replace('🇷 🇷','RR')
+	owo = owo.replace('ll','w')
+	owo = owo.replace('LL','W')
+	if random.randrange(0, 100) in range(50):
+		owo += '~'
+	await ctx.send(owo)
+
+@client.command()
 async def purge(ctx):
 	if not await client.is_owner(ctx.author):
 		embed = discord.Embed(title="you dont have permission to do this command", colour=discord.Colour.red(), description="become the owner of the bot nerd")
@@ -95,16 +113,17 @@ async def ban(ctx, user, *reason):
 
 @client.event
 async def on_member_join(member):
-	welcome = discord.utils.get(member.guild.channels, id=766848918499360809)
+	welcome = client.get_channel(766848918499360809)
 
-	await member.send(f"welcome to **{member.guild.name}**")
 	await welcome.send(f"{member.mention} has joined the server\n\nwe now have {len(member.guild.members)} members")
+	await member.send(f"welcome to **{member.guild.name}**")
 
 @client.event
 async def on_member_remove(member):
-	welcome = discord.utils.get(member.guild.channels, id=766848918499360809)
+	welcome = client.get_channel(766848918499360809)
 
 	await welcome.send(f"{member.mention} has left the server\n\nwe now have {len(member.guild.members)} members")
+	await member.send(f"thanks for joining **{member.guild.name}**, we hope to see you again")
 
 @client.event
 async def on_command_error(ctx:commands.Context, exception):
