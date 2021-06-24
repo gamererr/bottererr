@@ -19,6 +19,24 @@ with open("tokenfile", "r") as tokenfile:
 
 # VVVVVV commands VVVVVV'
 
+@client.command()
+async def owo(ctx, *owo):
+	owo = ' '.join(owo)
+	if owo == '':
+		await ctx.send('you need to give me something to owoify')
+		return
+	owo = owo.replace('rr','🇷')
+	owo = owo.replace('RR','🇷 🇷')
+	owo = owo.replace('r','w')
+	owo = owo.replace('R','W')
+	owo = owo.replace('🇷','rr')
+	owo = owo.replace('🇷 🇷','RR')
+	owo = owo.replace('ll','w')
+	owo = owo.replace('LL','W')
+	if random.randrange(0, 100) in range(50):
+		owo += '~'
+	await ctx.send(owo)
+
 @client.command(aliases=['mc'])
 async def membercount(ctx):
 	await ctx.send(len(ctx.guild.members))
