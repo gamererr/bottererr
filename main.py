@@ -12,34 +12,16 @@ client = commands.Bot(command_prefix='g!', intents=intents)
 async def on_ready():
 	print("hello world!")
 	gamerzone = client.get_guild(766848554899079218)
-	await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"Spotify"))
+	await client.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name=f"with your mom"))
 
 with open("tokenfile", "r") as tokenfile:
 		token=tokenfile.read()
 
 # VVVVVV commands VVVVVV'
 
-@client.command()
-async def owo(ctx, *owo):
-	owo = ' '.join(owo)
-	if owo == '':
-		await ctx.send('you need to give me something to owoify')
-		return
-	owo = owo.replace('rr','🇷')
-	owo = owo.replace('RR','🇷 🇷')
-	owo = owo.replace('r','w')
-	owo = owo.replace('R','W')
-	owo = owo.replace('🇷','rr')
-	owo = owo.replace('🇷 🇷','RR')
-	owo = owo.replace('ll','w')
-	owo = owo.replace('LL','W')
-	if random.randrange(0, 100) in range(50):
-		owo += '~'
-	await ctx.send(owo)
-
 @client.command(aliases=['mc'])
 async def membercount(ctx):
-	await ctx.send(len(ctx.guild.members))
+	await ctx.send(f"{len(ctx.guild.members)} members")
 
 @client.command()
 async def owo(ctx, *owo):
@@ -99,16 +81,28 @@ async def wii(ctx, *game):
 @client.command()
 async def kick(ctx, user, *reason):
 
+
 	reason = " ".join(reason)
+
+	if reason == "":
+		reason = "no reason given"
+
+	if ctx.message.mentions != []:
+		user = ctx.message.mentions
+	else:
+		user = client.get_user(int(user))
+		if not user:
+			await("you need to ping someone or give a user id")
+			return
 
 	if ctx.channel.permissions_for(ctx.author).kick_members:
 		try:
-			await ctx.message.mentions[0].send(f"kicked by {ctx.message.author} for `{reason}`")
-			await ctx.guild.kick(ctx.message.mentions[0], reason=f"kicked by ctx.message.author for {reason}")
-			await ctx.send(f"kicked {ctx.message.mentions[0].name} for `{reason}`")
+			await user.send(f"kicked by {ctx.message.author} for `{reason}`")
+			await ctx.guild.kick(user, reason=f"kicked by ctx.message.author for {reason}")
+			await ctx.send(f"kicked {user.name} for `{reason}`")
 		except discord.errors.HTTPException:
-			await ctx.guild.kick(ctx.message.mentions[0], reason=f"kicked by ctx.message.author for {reason}")
-			await ctx.send(f"kicked {ctx.message.mentions[0].name} for `{reason}`")
+			await ctx.guild.kick(user, reason=f"kicked by ctx.message.author for {reason}")
+			await ctx.send(f"kicked {user.name} for `{reason}`")
 	else:
 		embed = discord.Embed(title="you dont have permission to do this command", colour=discord.Colour.red(), description="become a mod nerd")
 
@@ -117,21 +111,31 @@ async def kick(ctx, user, *reason):
 @client.command()
 async def ban(ctx, user, *reason):
 
-	reason = " ".join(reason)
+	if reason == []:
+		reason = "no reason"
+	else:
+		reason = " ".join(reason)
+
+	if ctx.message.mentions != []:
+		user = ctx.message.mentions
+	else:
+		user = client.get_user(int(user))
+		if not user:
+			await("you need to ping someone or give a user id")
+			return
 
 	if ctx.channel.permissions_for(ctx.author).ban_members:
 		try:
-			await ctx.message.mentions[0].send(f"banned by {ctx.message.author} for `{reason}`")
-			await ctx.guild.ban(ctx.message.mentions[0], reason=f"banned by ctx.message.author for {reason}", delete_message_days=0)
-			await ctx.send(f"banned {ctx.message.mentions[0].name} for `{reason}`")
+			await user.send(f"banned by {ctx.message.author} for `{reason}`")
+			await ctx.guild.ban(user, reason=f"banned by ctx.message.author for {reason}", delete_message_days=0)
+			await ctx.send(f"banned {user.name} for `{reason}`")
 		except discord.errors.HTTPException:
-			await ctx.guild.ban(ctx.message.mentions[0], reason=f"banned by ctx.message.author for {reason}", delete_message_days=0)
-			await ctx.send(f"banned {ctx.message.mentions[0].name} for `{reason}`")
+			await ctx.guild.ban(user, reason=f"banned by ctx.message.author for {reason}", delete_message_days=0)
+			await ctx.send(f"banned {user.name} for `{reason}`")
 	else:
 		embed = discord.Embed(title="you dont have permission to do this command", colour=discord.Colour.red(), description="become a mod nerd")
 
 		await ctx.send(embed=embed)
-
 
 # VVVVVV events VVVVVV
 
@@ -163,5 +167,6 @@ async def on_command_error(ctx:commands.Context, exception):
 	else:
 		print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
 		traceback.print_exception(type(exception), exception, exception.__traceback__, file=sys.stderr)
+
 
 client.run(token)
