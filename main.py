@@ -158,7 +158,7 @@ async def mute(ctx, user, *reason):
 	await user.add_roles(muted)
 
 @client.command()
-async def mute(ctx, user, *reason):
+async def unmute(ctx, user, *reason):
 
 	if reason == []:
 		reason = "no reason"
