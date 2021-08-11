@@ -98,10 +98,10 @@ async def kick(ctx, user, *reason):
 	if ctx.channel.permissions_for(ctx.author).kick_members:
 		try:
 			await user.send(f"kicked by {ctx.message.author} for `{reason}`")
-			await ctx.guild.kick(user, reason=f"kicked by ctx.message.author for {reason}")
+			await ctx.guild.kick(user, reason=f"kicked by {ctx.message.author} for {reason}")
 			await ctx.send(f"kicked {user.name} for `{reason}`")
 		except discord.errors.HTTPException:
-			await ctx.guild.kick(user, reason=f"kicked by ctx.message.author for {reason}")
+			await ctx.guild.kick(user, reason=f"kicked by {ctx.message.author} for {reason}")
 			await ctx.send(f"kicked {user.name} for `{reason}`")
 	else:
 		embed = discord.Embed(title="you dont have permission to do this command", colour=discord.Colour.red(), description="become a mod nerd")
@@ -127,10 +127,10 @@ async def ban(ctx, user, *reason):
 	if ctx.channel.permissions_for(ctx.author).ban_members:
 		try:
 			await user.send(f"banned by {ctx.message.author} for `{reason}`")
-			await ctx.guild.ban(user, reason=f"banned by ctx.message.author for {reason}", delete_message_days=0)
+			await ctx.guild.ban(user, reason=f"banned by {ctx.message.author} for {reason}", delete_message_days=0)
 			await ctx.send(f"banned {user.name} for `{reason}`")
 		except discord.errors.HTTPException:
-			await ctx.guild.ban(user, reason=f"banned by ctx.message.author for {reason}", delete_message_days=0)
+			await ctx.guild.ban(user, reason=f"banned by {ctx.message.author} for {reason}", delete_message_days=0)
 			await ctx.send(f"banned {user.name} for `{reason}`")
 	else:
 		embed = discord.Embed(title="you dont have permission to do this command", colour=discord.Colour.red(), description="become a mod nerd")
