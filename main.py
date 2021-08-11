@@ -81,7 +81,6 @@ async def wii(ctx, *game):
 @client.command()
 async def kick(ctx, user, *reason):
 
-
 	reason = " ".join(reason)
 
 	if reason == "":
@@ -137,6 +136,48 @@ async def ban(ctx, user, *reason):
 
 		await ctx.send(embed=embed)
 
+@client.command()
+async def mute(ctx, user, *reason):
+
+	if reason == []:
+		reason = "no reason"
+	else:
+		reason = " ".join(reason)
+
+	if ctx.message.mentions != []:
+		user = ctx.message.mentions
+	else:
+		user = client.get_user(int(user))
+		if not user:
+			await("you need to ping someone or give a user id")
+			return
+
+	muted = client.get_role(774294917299830824)
+
+	await user.send(f"you were **muted** for {reason}")
+	await user.add_roles(muted)
+
+@client.command()
+async def mute(ctx, user, *reason):
+
+	if reason == []:
+		reason = "no reason"
+	else:
+		reason = " ".join(reason)
+
+	if ctx.message.mentions != []:
+		user = ctx.message.mentions
+	else:
+		user = client.get_user(int(user))
+		if not user:
+			await("you need to ping someone or give a user id")
+			return
+
+	muted = client.get_role(774294917299830824)
+
+	await user.send(f"you were **unmuted** for {reason}")
+	await user.remove_roles(muted)
+
 # VVVVVV events VVVVVV
 
 @client.event
@@ -167,6 +208,5 @@ async def on_command_error(ctx:commands.Context, exception):
 	else:
 		print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
 		traceback.print_exception(type(exception), exception, exception.__traceback__, file=sys.stderr)
-
 
 client.run(token)
