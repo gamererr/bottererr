@@ -26,7 +26,7 @@ with open("tokenfile", "r") as tokenfile:
 # VVVVVV commands VVVVVV'
 
 @slash.slash()
-async def membercount(ctx):
+async def membercount(ctx, hidden:bool=True):
 	await ctx.send(f"{len(ctx.guild.members)} members", hidden=hidden)
 
 @slash.slash()
